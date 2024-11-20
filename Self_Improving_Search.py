@@ -35,19 +35,20 @@ for name in ['root', 'duckduckgo_search', 'requests', 'urllib3']:
     logging.getLogger(name).propagate = False
 
 class OutputRedirector:
-    def __init__(self, stream=None):
-        self.stream = stream or StringIO()
-        self.original_stdout = sys.stdout
-        self.original_stderr = sys.stderr
+  """Windows-compatible output redirection"""
+  def __init__(self, stream=None):
+      self.stream = stream or StringIO()
+      self.original_stdout = sys.stdout
+      self.original_stderr = sys.stderr
+      
+  def __enter__(self):
+      sys.stdout = self.stream
+      sys.stderr = self.stream
+      return self.stream
 
-    def __enter__(self):
-        sys.stdout = self.stream
-        sys.stderr = self.stream
-        return self.stream
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        sys.stdout = self.original_stdout
-        sys.stderr = self.original_stderr
+  def __exit__(self, exc_type, exc_val, exc_tb):
+      sys.stdout = self.original_stdout
+      sys.stderr = self.original_stderr
 
 class EnhancedSelfImprovingSearch:
     def __init__(self, llm: LLMWrapper, parser: UltimateLLMResponseParser, max_attempts: int = 5):
