@@ -119,6 +119,26 @@ python Web-LLM.py
 
 The LLM settings can be modified in `llm_config.py`. You must specify your model name in the configuration for the researcher to function. The default configuration is optimized for research tasks with the specified Phi-3 model.
 
+
+## OpenAI Configuration
+
+To use OpenAI models:
+
+1. Set your OpenAI API key either:
+   - In `llm_config.py`: Add your API key to `LLM_CONFIG_OPENAI["api_key"]`
+   - Or as an environment variable: `export OPENAI_API_KEY='your-api-key'`
+
+2. Change the LLM_TYPE in `llm_config.py`:
+   ```python
+   LLM_TYPE = "openai"  # Change this line
+   ```
+
+3. Optional: Modify the model name in `LLM_CONFIG_OPENAI`:
+   ```python
+   "model_name": "gpt-4o-mini"  # Or another OpenAI model
+   ```
+
+
 ## Current Status
 This is a prototype that demonstrates functional automated research capabilities. While still in development, it successfully performs structured research tasks. Currently tested and working well with the phi3:3.8b-mini-128k-instruct model when the context is set as advised previously.
 

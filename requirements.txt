@@ -9,3 +9,4 @@ keyboard
 curses-windows; sys_platform == 'win32'
 tqdm
 urllib3
+openai
