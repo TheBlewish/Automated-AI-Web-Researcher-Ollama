@@ -81,6 +81,34 @@ ollama create research-phi3 -f modelfile
 
 Note: This specific configuration is necessary as recent Ollama versions have reduced context windows on models like phi3:3.8b-mini-128k-instruct despite the name suggesing high context which is why the modelfile step is necessary due to the high amount of information being used during the research process. 
 
+## Docker Setup
+
+1. Build the Docker image:
+
+```sh
+docker build -t automated-ai-web-researcher .
+```
+
+2. Run the Docker container:
+
+```sh
+docker run -it --rm automated-ai-web-researcher
+```
+
+## Docker Compose Setup
+
+1. Start the services using Docker Compose:
+
+```sh
+docker-compose up
+```
+
+2. Stop the services:
+
+```sh
+docker-compose down
+```
+
 ## Usage
 
 1. Start Ollama:
