@@ -21,6 +21,7 @@ LLM_CONFIG_LLAMA_CPP = {
 
 # LLM settings for Ollama
 LLM_CONFIG_OLLAMA = {
+    "base_url": "https://api.openai.com/v1",
     "llm_type": "ollama",
     "base_url": "http://localhost:11434",
     "model_name": "custom-phi3-32k-Q4_K_M",
