@@ -11,6 +11,7 @@ from llm_config import get_llm_config
 from llm_response_parser import UltimateLLMResponseParser
 from llm_wrapper import LLMWrapper
 from urllib.parse import urlparse
+import duckduckgo_search
 
 # Set up logging
 log_directory = 'logs'
@@ -35,19 +36,20 @@ for name in ['root', 'duckduckgo_search', 'requests', 'urllib3']:
     logging.getLogger(name).propagate = False
 
 class OutputRedirector:
-    def __init__(self, stream=None):
-        self.stream = stream or StringIO()
-        self.original_stdout = sys.stdout
-        self.original_stderr = sys.stderr
+  """Windows-compatible output redirection"""
+  def __init__(self, stream=None):
+      self.stream = stream or StringIO()
+      self.original_stdout = sys.stdout
+      self.original_stderr = sys.stderr
+      
+  def __enter__(self):
+      sys.stdout = self.stream
+      sys.stderr = self.stream
+      return self.stream
 
-    def __enter__(self):
-        sys.stdout = self.stream
-        sys.stderr = self.stream
-        return self.stream
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        sys.stdout = self.original_stdout
-        sys.stderr = self.original_stderr
+  def __exit__(self, exc_type, exc_val, exc_tb):
+      sys.stdout = self.original_stdout
+      sys.stderr = self.original_stderr
 
 class EnhancedSelfImprovingSearch:
     def __init__(self, llm: LLMWrapper, parser: UltimateLLMResponseParser, max_attempts: int = 5):
@@ -55,6 +57,8 @@ class EnhancedSelfImprovingSearch:
         self.parser = parser
         self.max_attempts = max_attempts
         self.llm_config = get_llm_config()
+        self.last_query = ""  # Add this
+        self.last_time_range = ""  # Add this
 
     @staticmethod
     def initialize_llm():
@@ -238,24 +242,55 @@ Do not provide any additional information or explanation.
         return " ".join(words[:5])
 
     def perform_search(self, query: str, time_range: str) -> List[Dict]:
+        """Performs the actual web search with enhanced error handling"""
         if not query:
             return []
 
         from duckduckgo_search import DDGS
 
-        with DDGS() as ddgs:
+        # Store the last query and time range for display purposes
+        self.last_query = query
+        self.last_time_range = time_range
+
+        max_retries = 3
+        for attempt in range(max_retries):
             try:
-                with OutputRedirector() as output:
-                    if time_range and time_range != 'none':
-                        results = list(ddgs.text(query, timelimit=time_range, max_results=10))
-                    else:
-                        results = list(ddgs.text(query, max_results=10))
-                ddg_output = output.getvalue()
-                logger.info(f"DDG Output in perform_search:\n{ddg_output}")
-                return [{'number': i+1, **result} for i, result in enumerate(results)]
+                with DDGS() as ddgs:
+                    try:
+                        if time_range and time_range != 'none':
+                            results = list(ddgs.text(
+                                query, 
+                                timelimit=time_range, 
+                                max_results=10,
+                                backend='api'  # Use API backend for more reliable results
+                            ))
+                        else:
+                            results = list(ddgs.text(
+                                query, 
+                                max_results=10,
+                                backend='api'  # Use API backend for more reliable results
+                            ))
+
+                        if results:
+                            return [{'number': i+1, **result} for i, result in enumerate(results)]
+                        else:
+                            print(f"{Fore.YELLOW}No results found on attempt {attempt + 1}. Retrying...{Style.RESET_ALL}")
+                            time.sleep(1)  # Add delay between retries
+                            
+                    except Exception as e:
+                        logger.error(f"DuckDuckGo search error on attempt {attempt + 1}: {str(e)}")
+                        print(f"{Fore.RED}Search error on attempt {attempt + 1}: {str(e)}{Style.RESET_ALL}")
+                        time.sleep(1)  # Add delay between retries
+                        continue
+
             except Exception as e:
-                print(f"{Fore.RED}Search error: {str(e)}{Style.RESET_ALL}")
-                return []
+                logger.error(f"DDGS initialization error on attempt {attempt + 1}: {str(e)}")
+                print(f"{Fore.RED}Search initialization error on attempt {attempt + 1}: {str(e)}{Style.RESET_ALL}")
+                time.sleep(1)  # Add delay between retries
+                continue
+
+        print(f"{Fore.RED}Search failed after {max_retries} attempts{Style.RESET_ALL}")
+        return []
 
     def display_search_results(self, results: List[Dict]) -> None:
         """Display search results with minimal output"""
