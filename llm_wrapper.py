@@ -23,9 +23,10 @@ class LLMWrapper:
     def _initialize_openai(self):
         """Initialize OpenAI client"""
         api_key = self.llm_config.get('api_key') or os.getenv('OPENAI_API_KEY')
+        base_url = self.llm_config.get('base_url', 'https://api.openai.com/v1')
         if not api_key:
             raise ValueError("OpenAI API key not found. Set it in config or OPENAI_API_KEY environment variable")
-        self.client = OpenAI(api_key=api_key)
+        self.client = OpenAI(api_key=api_key, base_url=base_url)
         self.model_name = self.llm_config.get('model_name', 'gpt-4o-mini')
 
     def generate(self, prompt, **kwargs):
