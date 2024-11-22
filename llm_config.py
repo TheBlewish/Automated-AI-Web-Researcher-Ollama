@@ -34,6 +34,7 @@ LLM_CONFIG_OLLAMA = {
 
 # New: LLM settings for OpenAI
 LLM_CONFIG_OPENAI = {
+    "base_url": "https://api.openai.com/v1",
     "llm_type": "openai",
     "model_name": "gpt-4o-mini",  
     "api_key": "",
