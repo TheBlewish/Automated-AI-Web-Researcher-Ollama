@@ -22,6 +22,7 @@ LLM_CONFIG_LLAMA_CPP = {
 # LLM settings for Ollama
 LLM_CONFIG_OLLAMA = {
     "llm_type": "ollama",
+    # change base_url to http://host.docker.internal:11434 in devcontainer
     "base_url": "http://localhost:11434",  # default Ollama server URL
     "model_name": "custom-phi3-32k-Q4_K_M",  # Replace with your Ollama model name
     "temperature": 0.7,

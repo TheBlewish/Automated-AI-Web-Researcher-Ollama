@@ -1,0 +1,19 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/javascript-node
+{
+  "name": "Automated Ai Web Researcher Ollama Devcontainer",
+  // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+  "features": {
+    "ghcr.io/nils-geistmann/devcontainers-features/zsh": {}
+  },
+
+	"dockerComposeFile": "docker-compose.yml",  // Features to add to the dev container. More info: https://containers.dev/features.
+  "service": "web",
+  "workspaceFolder": "/app",
+
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "pip install -r requirements.txt",
+  "postStartCommand": "python Web-LLM.py",
+
+  "overrideCommand": true
+}
