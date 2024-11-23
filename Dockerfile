@@ -1,6 +1,9 @@
 # Use an official Python runtime as a parent image
 FROM python:3.9-slim
 
+# Install gcc and g++ to fix the llama-cpp-python build error
+RUN apt-get update && apt-get install -y gcc g++
+
 # Set the working directory in the container
 WORKDIR /app
 
