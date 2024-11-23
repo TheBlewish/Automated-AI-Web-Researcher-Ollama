@@ -19,7 +19,7 @@ import tty
 from threading import Event
 from urllib.parse import urlparse
 from pathlib import Path
-from system_config import get_research_config
+from .system_config import get_research_config
 
 # Initialize colorama for cross-platform color support
 if os.name == 'nt':  # Windows-specific initialization

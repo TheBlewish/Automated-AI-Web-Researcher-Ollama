@@ -1,12 +1,12 @@
 """Factory for creating search providers based on configuration."""
 
 from typing import Type, Dict, Any
-from search_providers.base_provider import BaseSearchProvider
-from search_providers.bing_provider import BingSearchProvider
-from search_providers.brave_provider import BraveSearchProvider
-from search_providers.exa_provider import ExaSearchProvider
-from search_providers.tavily_provider import TavilySearchProvider
-from system_config import get_search_config
+from .base_provider import BaseSearchProvider
+from .bing_provider import BingSearchProvider
+from .brave_provider import BraveSearchProvider
+from .exa_provider import ExaSearchProvider
+from .tavily_provider import TavilySearchProvider
+from ..system_config import get_search_config
 
 class SearchProviderFactory:
     """
