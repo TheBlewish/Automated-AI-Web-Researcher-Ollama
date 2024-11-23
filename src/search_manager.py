@@ -5,7 +5,7 @@ import logging
 from typing import Dict, List, Any, Optional
 from time import sleep
 
-from system_config import get_search_config
+from .system_config import get_search_config
 from search_providers.factory import SearchProviderFactory
 
 logger = logging.getLogger(__name__)

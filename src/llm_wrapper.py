@@ -2,7 +2,7 @@ import os
 from llama_cpp import Llama
 import requests
 import json
-from llm_config import get_llm_config
+from .llm_config import get_llm_config
 from openai import OpenAI
 from anthropic import Anthropic
 

@@ -9,13 +9,13 @@ from colorama import Fore, Style
 import logging
 import sys
 from io import StringIO
-from web_scraper import get_web_content, can_fetch
-from llm_config import get_llm_config
-from llm_response_parser import UltimateLLMResponseParser
-from llm_wrapper import LLMWrapper
-from search_manager import SearchManager
+from .web_scraper import get_web_content, can_fetch
+from .llm_config import get_llm_config
+from .llm_response_parser import UltimateLLMResponseParser
+from .llm_wrapper import LLMWrapper
+from .search_manager import SearchManager
 from urllib.parse import urlparse
-from system_config import RESEARCH_CONFIG
+from .system_config import RESEARCH_CONFIG
 
 # Set up logging
 log_directory = 'logs'
