@@ -14,8 +14,9 @@ from datetime import datetime
 from io import StringIO
 from colorama import init, Fore, Style
 import select
-import termios
-import tty
+if os.name != 'nt':
+    import termios
+    import tty
 from threading import Event
 from urllib.parse import urlparse
 from pathlib import Path
@@ -281,7 +282,7 @@ class OutputRedirector:
         sys.stderr = self.stream
         return self.stream
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type, value, traceback):
         sys.stdout = self.original_stdout
         sys.stderr = self.original_stderr
 
@@ -781,8 +782,7 @@ Do not provide any additional information or explanation, note that the time ran
                     import ctypes
                     ctypes.pythonapi.PyThreadState_SetAsyncExc(
                         ctypes.c_long(self.research_thread.ident),
-                        ctypes.py_object(SystemExit)
-                    )
+                        ctypes.py_object(SystemExit))
             except Exception as e:
                 logger.error(f"Error terminating research thread: {str(e)}")
 
@@ -1404,11 +1404,14 @@ Answer:
 
         # Save original terminal settings
         fd = sys.stdin.fileno()
-        old_settings = termios.tcgetattr(fd)
+        old_settings = None
+        if os.name != 'nt':
+            old_settings = termios.tcgetattr(fd)
 
         try:
             # Set terminal to raw mode
-            tty.setraw(fd)
+            if os.name != 'nt':
+                tty.setraw(fd)
 
             current_line = []
             while True:
@@ -1445,7 +1448,8 @@ Answer:
 
         finally:
             # Restore terminal settings
-            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+            if old_settings and os.name != 'nt':
+                termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
             print()  # New line for clean display
 
     def _start_auto_save(self):
