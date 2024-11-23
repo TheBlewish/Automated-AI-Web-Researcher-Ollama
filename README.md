@@ -67,27 +67,14 @@ The system supports multiple search providers with automatic fallback:
 
 ## Installation
 
-1. Clone the repository:
+### 1. Clone the repository and cd into the folder:
 
 ```sh
 git clone https://github.com/TheBlewish/Automated-AI-Web-Researcher-Ollama
 cd Automated-AI-Web-Researcher-Ollama
 ```
 
-2. Create and activate a virtual environment:
-
-```sh
-python -m venv venv
-source venv/bin/activate  # On Windows, use venv\Scripts\activate
-```
-
-3. Install dependencies:
-
-```sh
-pip install -r requirements.txt
-```
-
-4. Set up API keys:
+### 2. Set up API keys:
 Create a `.env` file in the project root with your API keys:
 ```
 TAVILY_API_KEY=your_tavily_key
@@ -97,12 +84,12 @@ EXA_API_KEY=your_exa_key
 ```
 Note: The system will work with any combination of configured providers. If a provider's API key is not set, it will be skipped in the fallback chain. You don't need them all. If you don't add any, DuckDuckGo will be used.
 
-5. Install and Configure Ollama:
+### 3. Install and Configure Ollama:
 - Install Ollama following instructions at https://ollama.ai
 - Using your selected model file, create a custom model variant with the required context length
   (phi3:3.8b-mini-128k-instruct or phi3:14b-medium-128k-instruct are recommended)
 
-Create a file named `modelfile` with these exact contents:
+Create a file named `modelfile` in the project root with these exact contents:
 
 ```
 FROM your-model-name
@@ -120,6 +107,24 @@ ollama create research-phi3 -f modelfile
 
 Note: This specific configuration is necessary as recent Ollama versions have reduced context windows on models like phi3:3.8b-mini-128k-instruct despite the name suggesting high context which is why the modelfile step is necessary due to the high amount of information being used during the research process. 
 
+### 4. Configure llm_config.py:
+ - set the modelname to the same name you created it with using 'ollama create modelname -f modelfile' in the previous step
+
+ For example:
+
+ ```python
+LLM_CONFIG_OLLAMA = {
+    "llm_type": "ollama",
+    "base_url": "http://localhost:11434",  # default Ollama server URL
+    "model_name": "research-phi3",  # Replace with your Ollama model name
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "n_ctx": 55000,
+    "context_length": 55000,
+    "stop": ["User:", "\n\n"]
+}
+ ```
+
 ## Usage
 
 1. Start Ollama:
@@ -131,7 +136,7 @@ ollama serve
 2. Run the researcher:
 
 ```sh
-python Web-LLM.py
+./start.sh
 ```
 
 3. Start a research session:
