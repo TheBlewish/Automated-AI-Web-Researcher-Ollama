@@ -164,6 +164,17 @@ The system can be configured through several files:
     - Provider-specific parameters
     - Rate limiting controls
 
+## Running on Windows
+To use this application on Windows, you'll need to install **WSL 2** (if you already have it, skip to step 4).
+
+1. Open an administrator terminal and run the following command:
+    ```cmd
+    wsl --install
+    ```
+2. Once the installation is complete, press the Windows key and search for "Ubuntu" to launch WSL 2.
+3. Follow the on-screen instructions to complete the Ubuntu setup.
+4. Proceed from the beginning with the installation and usage steps in the WSL terminal.
+
 ## Current Status
 This is a prototype that demonstrates functional automated research capabilities. While still in development, it successfully performs structured research tasks. It has been tested and works well with the `phi3:3.8b-mini-128k-instruct` model when the context is set as advised previously.
 
