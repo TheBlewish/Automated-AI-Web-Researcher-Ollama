@@ -1,8 +1,8 @@
 # llm_config.py
 
-LLM_TYPE = "openai"  # Options: 'llama_cpp', 'ollama', 'openai', 'anthropic'
+LLM_TYPE = "ollama"  # Options: 'ollama', 'openai', 'anthropic' (careful API calls will cost a lot if your actually using ChatGPT)
 
-# LLM settings for llama_cpp
+# LLM settings for llama_cpp DOESN'T WORK 
 MODEL_PATH = "/home/james/llama.cpp/models/gemma-2-9b-it-Q6_K.gguf" # Replace with your llama.cpp models filepath
 
 LLM_CONFIG_LLAMA_CPP = {
@@ -31,7 +31,7 @@ LLM_CONFIG_OLLAMA = {
     "stop": ["User:", "\n\n"]
 }
 
-# LLM settings for OpenAI
+# LLM settings for OpenAI be careful API calls will cost a lot if your actually using ChatGPT
 LLM_CONFIG_OPENAI = {
     "llm_type": "openai",
     "api_key": "",  # Set via environment variable OPENAI_API_KEY
