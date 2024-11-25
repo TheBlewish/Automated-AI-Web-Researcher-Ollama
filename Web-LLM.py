@@ -69,61 +69,99 @@ def print_header():
     """ + Style.RESET_ALL)
     
 def get_multiline_input() -> str:
-    """Get multiline input using raw terminal mode for reliable CTRL+D handling"""
-    print(f"{Fore.GREEN}📝 Enter your message (Press CTRL+D to submit):{Style.RESET_ALL}")
+    """Get multiline input using raw terminal mode for reliable CTRL+D/CTRL+Z handling"""
+    submit_key = "CTRL+Z" if os.name == 'nt' else "CTRL+D"
+    print(f"{Fore.GREEN}📝 Enter your message (Press {submit_key} to submit):{Style.RESET_ALL}")
     lines = []
 
-    import termios
-    import tty
-    import sys
-
-    # Save original terminal settings
-    fd = sys.stdin.fileno()
-    old_settings = termios.tcgetattr(fd)
-
-    try:
-        # Set terminal to raw mode
-        tty.setraw(fd)
-
+    if os.name == 'nt':  # Windows
+        import msvcrt
         current_line = []
         while True:
-            # Read one character at a time
-            char = sys.stdin.read(1)
+            if msvcrt.kbhit():
+                char = msvcrt.getwch()
+                
+                # CTRL+Z (Windows EOF)
+                if ord(char) == 26:
+                    sys.stdout.write('\n')
+                    if current_line:
+                        lines.append(''.join(current_line))
+                    return ' '.join(lines).strip()
 
-            # CTRL+D detection
-            if not char or ord(char) == 4:  # EOF or CTRL+D
-                sys.stdout.write('\n')  # New line for clean display
-                if current_line:
+                # Enter key
+                elif char == '\r':
+                    sys.stdout.write('\n')
                     lines.append(''.join(current_line))
-                return ' '.join(lines).strip()
+                    current_line = []
 
-            # Handle special characters
-            elif ord(char) == 13:  # Enter
-                sys.stdout.write('\n')
-                lines.append(''.join(current_line))
-                current_line = []
+                # Backspace
+                elif char == '\b':
+                    if current_line:
+                        current_line.pop()
+                        sys.stdout.write('\b \b')
 
-            elif ord(char) == 127:  # Backspace
-                if current_line:
-                    current_line.pop()
-                    sys.stdout.write('\b \b')  # Erase character
+                # CTRL+C
+                elif ord(char) == 3:
+                    sys.stdout.write('\n')
+                    return 'q'
 
-            elif ord(char) == 3:  # CTRL+C
-                sys.stdout.write('\n')
-                return 'q'
+                # Normal character
+                elif 32 <= ord(char) <= 126:
+                    current_line.append(char)
+                    sys.stdout.write(char)
 
-            # Normal character
-            elif 32 <= ord(char) <= 126:  # Printable characters
-                current_line.append(char)
-                sys.stdout.write(char)
+                sys.stdout.flush()
 
-            # Flush output
-            sys.stdout.flush()
+    else:  # Unix-like systems
+        import termios
+        import tty
 
-    finally:
-        # Restore terminal settings
-        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-        print()  # New line for clean display
+        # Save original terminal settings
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+
+        try:
+            # Set terminal to raw mode
+            tty.setraw(fd)
+
+            current_line = []
+            while True:
+                # Read one character at a time
+                char = sys.stdin.read(1)
+
+                # CTRL+D detection
+                if not char or ord(char) == 4:
+                    sys.stdout.write('\n')
+                    if current_line:
+                        lines.append(''.join(current_line))
+                    return ' '.join(lines).strip()
+
+                # Handle special characters
+                elif ord(char) == 13:  # Enter
+                    sys.stdout.write('\n')
+                    lines.append(''.join(current_line))
+                    current_line = []
+
+                elif ord(char) == 127:  # Backspace
+                    if current_line:
+                        current_line.pop()
+                        sys.stdout.write('\b \b')
+
+                elif ord(char) == 3:  # CTRL+C
+                    sys.stdout.write('\n')
+                    return 'q'
+
+                # Normal character
+                elif 32 <= ord(char) <= 126:
+                    current_line.append(char)
+                    sys.stdout.write(char)
+
+                sys.stdout.flush()
+
+        finally:
+            # Restore terminal settings
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+            print()
 
 def initialize_system():
     """Initialize system with proper error checking"""
