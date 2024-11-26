@@ -103,7 +103,10 @@ The key distinction is that this isn't just a chatbot—it's an automated resear
         - Generated summary
 
 ## Configuration
-The LLM settings can be modified in `llm_config.py`. You must specify your model name in the configuration for the researcher to function. The default configuration is optimized for research tasks with the specified Phi-3 model.
+The LLM settings can be modified in `src/llm_config.py`. You must specify your model name in the configuration for the researcher to function. The default configuration is optimized for research tasks with the specified Phi-3 model.
+
+A note on setting up `llm_config.py`: 
+In the modelfile, you will have specified the name of the base model like `FROM base-model-name`, setting a parameter with `PARAMETER num_ctx 38000`. This specifies a configuration for the base model. The command `ollama create modelname -f modelfile` named this particular configuration, and set it up to be hosted on the ollama server. The same modelname from this command is what should be entered into `src/llm_config.py` as the model's name there, NOT the base model name from within `modelfile`.
 
 ## Current Status
 This is a prototype that demonstrates functional automated research capabilities. While still in development, it successfully performs structured research tasks. It has been tested and works well with the `phi3:3.8b-mini-128k-instruct` model when the context is set as advised previously.
