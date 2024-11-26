@@ -44,26 +44,13 @@ The key distinction is that this isn't just a chatbot—it's an automated resear
     cd Automated-AI-Web-Researcher-Ollama
     ```
 
-2. **Create and activate a virtual environment:**
-
-    ```sh
-    python -m venv venv
-    source venv/bin/activate
-    ```
-
-3. **Install dependencies:**
-
-    ```sh
-    pip install -r requirements.txt
-    ```
-
-4. **Install and configure Ollama:**
+2. **Install and configure Ollama:**
 
     Install Ollama following the instructions at [https://ollama.ai](https://ollama.ai).
 
     Using your selected model file, create a custom model variant with the required context length (`phi3:3.8b-mini-128k-instruct` or `phi3:14b-medium-128k-instruct` are recommended).
 
-    Create a file named `modelfile` with the following exact contents:
+    Create a file named `modelfile` in the project root with the following exact contents:
 
     ```
     FROM your-model-name
@@ -91,8 +78,9 @@ The key distinction is that this isn't just a chatbot—it's an automated resear
 2. **Run the researcher:**
 
     ```sh
-    python Web-LLM.py
+    ./start.sh
     ```
+    This will automatically create a python venv in which requirements will be installed.
 
 3. **Start a research session:**
     - Type `@` followed by your research query.
