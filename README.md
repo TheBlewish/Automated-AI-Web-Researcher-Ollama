@@ -44,26 +44,13 @@ The key distinction is that this isn't just a chatbot—it's an automated resear
     cd Automated-AI-Web-Researcher-Ollama
     ```
 
-2. **Create and activate a virtual environment:**
-
-    ```sh
-    python -m venv venv
-    source venv/bin/activate
-    ```
-
-3. **Install dependencies:**
-
-    ```sh
-    pip install -r requirements.txt
-    ```
-
-4. **Install and configure Ollama:**
+2. **Install and configure Ollama:**
 
     Install Ollama following the instructions at [https://ollama.ai](https://ollama.ai).
 
     Using your selected model file, create a custom model variant with the required context length (`phi3:3.8b-mini-128k-instruct` or `phi3:14b-medium-128k-instruct` are recommended).
 
-    Create a file named `modelfile` with the following exact contents:
+    Create a file named `modelfile` in the project root with the following exact contents:
 
     ```
     FROM your-model-name
@@ -108,8 +95,9 @@ Then change to the left of where it says replace with your Ollama model name, th
 2. **Run the researcher:**
 
     ```sh
-    python Web-LLM.py
+    ./start.sh
     ```
+    This will automatically create a python venv in which requirements will be installed.
 
 3. **Start a research session:**
     - Type `@` followed by your research query.
@@ -132,7 +120,10 @@ Then change to the left of where it says replace with your Ollama model name, th
         - Generated summary
 
 ## Configuration
-The LLM settings can be modified in `llm_config.py`. You must specify your model name in the configuration for the researcher to function. The default configuration is optimized for research tasks with the specified Phi-3 model.
+The LLM settings can be modified in `src/llm_config.py`. You must specify your model name in the configuration for the researcher to function. The default configuration is optimized for research tasks with the specified Phi-3 model.
+
+A note on setting up `llm_config.py`: 
+In the modelfile, you will have specified the name of the base model like `FROM base-model-name`, setting a parameter with `PARAMETER num_ctx 38000`. This specifies a configuration for the base model. The command `ollama create modelname -f modelfile` named this particular configuration, and set it up to be hosted on the ollama server. The same modelname from this command is what should be entered into `src/llm_config.py` as the model's name there, NOT the base model name from within `modelfile`.
 
 ## Current Status
 This is a prototype that demonstrates functional automated research capabilities. While still in development, it successfully performs structured research tasks. It has been tested and works well with the `phi3:3.8b-mini-128k-instruct` model when the context is set as advised previously.

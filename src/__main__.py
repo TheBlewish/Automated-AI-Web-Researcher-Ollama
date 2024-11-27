@@ -4,12 +4,12 @@ from colorama import init, Fore, Style
 import logging
 import time
 from io import StringIO
-from Self_Improving_Search import EnhancedSelfImprovingSearch
-from llm_config import get_llm_config
-from llm_response_parser import UltimateLLMResponseParser
-from llm_wrapper import LLMWrapper
-from strategic_analysis_parser import StrategicAnalysisParser
-from research_manager import ResearchManager
+from .Self_Improving_Search import EnhancedSelfImprovingSearch
+from .llm_config import get_llm_config
+from .llm_response_parser import UltimateLLMResponseParser
+from .llm_wrapper import LLMWrapper
+from .strategic_analysis_parser import StrategicAnalysisParser
+from .research_manager import ResearchManager
 
 # Initialize colorama
 if os.name == 'nt':  # Windows-specific initialization

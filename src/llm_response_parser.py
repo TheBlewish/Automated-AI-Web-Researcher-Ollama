@@ -2,7 +2,7 @@ import re
 from typing import Dict, List, Union, Optional
 import logging
 import json
-from strategic_analysis_parser import StrategicAnalysisParser, AnalysisResult, ResearchFocus
+from .strategic_analysis_parser import StrategicAnalysisParser, AnalysisResult, ResearchFocus
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
