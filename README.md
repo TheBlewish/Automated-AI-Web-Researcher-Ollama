@@ -101,7 +101,7 @@ python Web-LLM.py
 
 3. Start a research session:
 - Type `@` followed by your research query
-- Press CTRL+D to submit
+- Press CTRL+Z to submit (for windows)
 - Example: `@What year is global population projected to start declining?`
 
 4. During research you can use the following commands by typing the letter associated with each and submitting with CTRL+D:
