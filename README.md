@@ -49,20 +49,26 @@ git clone https://github.com/hafeezhmha/Automated-AI-Web-Researcher-Ollama.git
 cd Automated-AI-Web-Researcher-Ollama
 ```
 
-2. Create and activate a virtual environment:
+2. Checkout the `feature/windows-support` branch:
+
+```sh
+git checkout -b feature/windows-support origin/feature/windows-support
+```
+
+3. Create and activate a virtual environment:
 
 ```sh
 python -m venv venv
 venv\Scripts\activate
 ```
 
-3. Install dependencies:
+4. Install dependencies:
 
 ```sh
 pip install -r requirements.txt
 ```
 
-4. Install and Configure Ollama:
+5. Install and Configure Ollama:
 - Install Ollama following instructions at https://ollama.ai
 - Using your selected model file, create a custom model variant with the required context length
   (phi3:3.8b-mini-128k-instruct or phi3:14b-medium-128k-instruct are recommended)
