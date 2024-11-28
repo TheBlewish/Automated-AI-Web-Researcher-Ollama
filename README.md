@@ -1,4 +1,20 @@
 # Automated-AI-Web-Researcher-Ollama
+# Docker Support (Linux Only)
+This branch supports Docker, but because of the hosting only on Linux as of now.
+
+Ensure that you have configured the model and that Ollama is running. Then, to build and run the app, follow these steps:
+## Docker Setup
+1. Build the Docker image:
+   
+    ```sh
+    docker build -t automated-ai-web-researcher .
+    ```
+
+2. Run the Docker container:
+   
+    ```sh
+    docker run -it --rm --network host automated-ai-web-researcher
+    ```
 
 ## Description
 Automated-AI-Web-Researcher is an innovative research assistant that leverages locally run large language models through Ollama to conduct thorough, automated online research on any given topic or question. Unlike traditional LLM interactions, this tool actually performs structured research by breaking down queries into focused research areas, systematically investigating each area via web searching and scraping relevant websites, and compiling its findings. The findings are automatically saved into a text document with all the content found and links to the sources. Whenever you want it to stop its research, you can input a command, which will terminate the research. The LLM will then review all of the content it found and provide a comprehensive final summary of your original topic or question. Afterward, you can ask the LLM questions about its research findings.
