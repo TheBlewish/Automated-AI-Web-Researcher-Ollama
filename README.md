@@ -44,20 +44,26 @@ The key distinction is that this isn't just a chatbot—it's an automated resear
     cd Automated-AI-Web-Researcher-Ollama
     ```
 
-2. **Create and activate a virtual environment:**
+2. **Checkout the `feature/windows-support` branch:**
+
+   ```sh
+   git checkout -b feature/windows-support origin/feature/windows-support
+   ```
+
+3. **Create and activate a virtual environment:**
 
     ```sh
     python -m venv venv
     source venv/bin/activate
     ```
 
-3. **Install dependencies:**
+4. **Install dependencies:**
 
     ```sh
     pip install -r requirements.txt
     ```
 
-4. **Install and configure Ollama:**
+5. **Install and configure Ollama:**
 
     Install Ollama following the instructions at [https://ollama.ai](https://ollama.ai).
 
@@ -81,7 +87,7 @@ The key distinction is that this isn't just a chatbot—it's an automated resear
 
     **Note:** This specific configuration is necessary as recent Ollama versions have reduced context windows on models like `phi3:3.8b-mini-128k-instruct` despite the name suggesting high context, which is why the `modelfile` step is necessary due to the large amount of information used during the research process.
 
-5. Go to the llm_config.py file which should hav an ollama section that looks like this:
+6. Go to the llm_config.py file which should hav an ollama section that looks like this:
 
 ```sh
 LLM_CONFIG_OLLAMA = {
