@@ -10,7 +10,6 @@ LLM_CONFIG_OLLAMA = {
     "temperature": 0.7,
     "top_p": 0.9,
     "n_ctx": 55000,
-    "context_length": 55000,
     "stop": ["User:", "\n\n"]
 }
 
