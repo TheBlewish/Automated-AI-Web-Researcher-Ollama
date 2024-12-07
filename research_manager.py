@@ -778,21 +778,40 @@ Do not provide any additional information or explanation, note that the time ran
             self.ui.cleanup()
 
     def _initialize_document(self):
-        """Initialize research session document"""
+        """Initialize research session document with descriptive filename"""
         try:
+            # Generate brief topic summary for filename
+            filename_prompt = f"""
+Create a 2-4 word summary of this research topic that would work well as part of a filename. 
+Use only lowercase letters and underscores, no spaces or special characters.
+
+Topic: {self.original_query}
+
+Respond with ONLY the summary, nothing else. Example format: machine_learning_basics
+Summary:"""
+            
+            topic_summary = self.llm.generate(filename_prompt, max_tokens=50).strip()
+            
+            # Clean the summary to be filename-safe
+            topic_summary = re.sub(r'[^a-z0-9_]', '', topic_summary.lower())
+            if not topic_summary:
+                topic_summary = 'research'  # Fallback if generation fails
+            
             # Get all existing research session files
             self.session_files = []
             for file in os.listdir():
                 if file.startswith("research_session_") and file.endswith(".txt"):
                     try:
-                        num = int(file.split("_")[2].split(".")[0])
+                        num = int(file.split("_")[-1].split(".")[0])
                         self.session_files.append(num)
                     except ValueError:
                         continue
 
             # Determine next session number
             next_session = 1 if not self.session_files else max(self.session_files) + 1
-            self.document_path = f"research_session_{next_session}.txt"
+            
+            # Create filename with topic summary
+            self.document_path = f"research_session_{topic_summary}_{next_session}.txt"
 
             # Initialize the new document
             with open(self.document_path, 'w', encoding='utf-8') as f:
@@ -804,7 +823,8 @@ Do not provide any additional information or explanation, note that the time ran
 
         except Exception as e:
             logger.error(f"Error initializing document: {str(e)}")
-            self.document_path = "research_findings.txt"
+            # Fallback to basic filename if something goes wrong
+            self.document_path = f"research_findings_{next_session}.txt"
             with open(self.document_path, 'w', encoding='utf-8') as f:
                 f.write("Research Findings:\n\n")
                 f.flush()
